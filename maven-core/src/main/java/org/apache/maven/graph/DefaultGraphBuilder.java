@@ -311,11 +311,27 @@ public class DefaultGraphBuilder
             if ( !resumed )
             {
                 throw new MavenExecutionException( "Could not find project to resume reactor build from: " + selector
-                    + " vs " + projects, request.getPom() );
+                    + " vs " + formatProjects( projects ), request.getPom() );
             }
         }
 
         return result;
+    }
+
+    private String formatProjects( List<MavenProject> projects )
+    {
+        StringBuilder projectNames = new StringBuilder();
+        for ( int index = 0, size = projects.size(); index < size; index++ )
+        {
+            MavenProject project = projects.get( index );
+            projectNames.append( project.getGroupId() ).append( ":" ).append( project.getArtifactId() );
+            boolean lastElement = index + 1 == size;
+            if (!lastElement)
+            {
+                projectNames.append( ", " );
+            }
+        }
+        return projectNames.toString();
     }
 
     private boolean isMatchingProject( MavenProject project, String selector, File reactorDirectory )
