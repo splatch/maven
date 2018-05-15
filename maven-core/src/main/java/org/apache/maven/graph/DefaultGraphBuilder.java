@@ -321,15 +321,18 @@ public class DefaultGraphBuilder
     private String formatProjects( List<MavenProject> projects )
     {
         StringBuilder projectNames = new StringBuilder();
-        for ( int index = 0, size = projects.size(); index < size; index++ )
+        boolean separator = false;
+        for ( MavenProject project : projects )
         {
-            MavenProject project = projects.get( index );
-            projectNames.append( project.getGroupId() ).append( ":" ).append( project.getArtifactId() );
-            boolean lastElement = index + 1 == size;
-            if (!lastElement)
+            if ( separator )
             {
                 projectNames.append( ", " );
             }
+            else
+            {
+                separator = true;
+            }
+            projectNames.append( project.getGroupId() ).append( ':' ).append( project.getArtifactId() );
         }
         return projectNames.toString();
     }
